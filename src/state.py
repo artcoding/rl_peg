@@ -4,7 +4,7 @@ from copy import copy
 
 
 class State:
-    def __init__(self, value: int, rows: int):
+    def __init__(self, value: int, rows: int=5):
         self.value = value
         self.rows = rows
 
@@ -43,7 +43,28 @@ class State:
         self.value = self.value ^ x
 
     def rotate(self) -> State:
-        return self
+        """
+        Return image of state rotated clockwise\.
+        """
+        rotated = self.from_value(0)
+
+        bit_pos = 0
+        for row in range(self.rows):
+            # position in rows after rotation
+            new_row_pos = self.rows - 1 - row
+
+            for new_row in range(self.rows - 1 - row, self.rows):
+                # bit position in rotated value
+                new_bit_pos = (1 + new_row) * new_row // 2 + new_row_pos
+
+                # Read bit from bit_pos in self.value
+                bit = self.value & (1 << bit_pos)
+                # Insert bit to new_bit_pos in rotated.value
+                if bit != 0:
+                    rotated.value = rotated.value | (1 << new_bit_pos)
+                bit_pos += 1
+
+        return rotated
 
     def mirror(self) -> State:
         """
