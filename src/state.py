@@ -17,6 +17,12 @@ class State:
             return self.value == other.value and self.rows == self.rows
         return False
 
+    def __hash__(self) -> bool:
+        return self.value
+
+    def __repr__(self):
+        return f"value = {self.value}; rows = {self.rows}"
+
     def swap_bits(self, p1: int, p2: int) -> None:
         """
         Swap bits at positions p1 and p2 in self.value
@@ -75,3 +81,14 @@ class State:
                 other.swap_bits(start + c, start + count - c)
 
         return other
+
+    def all_equivalent(self) -> {State}:
+        """
+        Return the set of States into which self transforms under all operations.
+        """
+        mirror = self.mirror()
+        rotated = self.rotate()
+        rotated_mirror = mirror.rotate()
+
+        res = {self, mirror, rotated, rotated_mirror, rotated.rotate(), rotated_mirror.rotate()}
+        return res
