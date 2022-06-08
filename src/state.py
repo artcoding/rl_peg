@@ -8,10 +8,6 @@ class State:
         self.value = value
         self.rows = rows
 
-        self.mirror_map = {}
-        # for row in range(1, rows):
-        #     for pos in
-
     def from_value(self, value: int) -> State:
         return State(value=value, rows=self.rows)
 
