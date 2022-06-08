@@ -20,7 +20,7 @@ class State:
     def __hash__(self) -> bool:
         return self.value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"value = {self.value}; rows = {self.rows}"
 
     def swap_bits(self, p1: int, p2: int) -> None:
