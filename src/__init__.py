@@ -1,3 +1,2 @@
-# import src.q_learn
-from .state import State
-from .utils import calc_bit_pos, bit_moves
+from .state import State, find_moves
+from .utils import calc_space, space_moves
