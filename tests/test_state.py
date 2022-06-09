@@ -39,3 +39,16 @@ def test_rotate():
     state = src.State(value=1 << 4, rows=5)
     new_state = state.rotate()
     assert new_state == state.from_value(value=1 << 8)
+
+
+def test_find_moves():
+    state = src.State(value=(1 << 4) + (1 << 2), rows=3)
+    assert len(src.find_moves(state)) == 0
+
+    state = src.State(value=(1 << 4) + (1 << 5), rows=3)
+    assert src.find_moves(state) == {state.from_value(1 << 3)}
+
+    state = src.State(value=(1 << 15) - 2 - (1 << 3), rows=5)
+    correct_moves = {state.from_value(28542), state.from_value(31678),
+                     state.from_value(32723), state.from_value(32718)}
+    assert src.find_moves(state) == correct_moves
