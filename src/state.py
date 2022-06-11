@@ -2,7 +2,7 @@
 from __future__ import annotations
 from copy import copy
 
-from src.utils import calc_space, space_moves
+from src.utils import calc_space
 
 
 class State:
@@ -18,7 +18,7 @@ class State:
             return self.value == other.value and self.rows == self.rows
         return False
 
-    def __hash__(self) -> bool:
+    def __hash__(self) -> int:
         return self.value
 
     def __repr__(self) -> str:
@@ -106,23 +106,3 @@ class State:
 
         res = {self, mirror, rotated, rotated_mirror, rotated.rotate(), rotated_mirror.rotate()}
         return res
-
-
-def find_moves(state: State) -> {State}:
-    space_moves_ = space_moves(state.rows)
-    new_states = set()
-
-    for space in range(state.spaces()):
-        if state.is_empty(space):
-            continue
-
-        for space_move in space_moves_[space]:
-            kill, move_to = space_move
-            if not state.is_empty(kill) and state.is_empty(move_to):
-                new_state = state.copy()
-                new_state.clear_space(space)
-                new_state.clear_space(kill)
-                new_state.set_space(move_to)
-                new_states.add(new_state)
-
-    return new_states
