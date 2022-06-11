@@ -6,12 +6,11 @@ from src.utils import calc_space, space_moves
 
 
 class State:
-    def __init__(self, value: int, rows: int = 5):
-        self.value = value
-        self.rows = rows
 
-    def from_value(self, value: int) -> State:
-        return State(value=value, rows=self.rows)
+    rows = 5
+
+    def __init__(self, value: int):
+        self.value = value
 
     def __eq__(self, other: State) -> bool:
         """Overrides the default implementation"""
@@ -23,7 +22,7 @@ class State:
         return self.value
 
     def __repr__(self) -> str:
-        return f"value = {self.value}; rows = {self.rows}"
+        return f"value = {self.value}, {bin(self.value)}"
 
     def spaces(self) -> int:
         return (1 + self.rows) * self.rows // 2
@@ -38,7 +37,7 @@ class State:
         self.value &= ~(1 << space)
 
     def copy(self) -> State:
-        return State(self.value, self.rows)
+        return State(self.value)
 
     def _swap_bits(self, p1: int, p2: int) -> None:
         """
@@ -65,7 +64,7 @@ class State:
         """
         Return image of state rotated clockwise.
         """
-        rotated = self.from_value(0)
+        rotated = State(0)
 
         bit_pos = 0
         for row in range(self.rows):

@@ -2,23 +2,24 @@ from .context import src
 
 
 def test_mirror():
-    state = src.State(value=1 << 4, rows=3)
+    src.State.rows = 3
+    state = src.State(value=1 << 4)
     new_state = state.mirror()
     assert new_state == state
 
     # Mirror 101100 (1 + 4 + 8 = 13) into 110001 (1 + 2 + 32 = 35)
-    state = src.State(value=13, rows=3)
+    state = src.State(value=13)
     new_state = state.mirror()
-    assert new_state == state.from_value(value=35)
+    assert new_state == src.State(value=35)
 
     # Mirror back to the original state
     new_state = new_state.mirror()
     assert new_state == state
 
     # Mirror 001101 (4 + 8 + 32 = 44) into 010101 (2 + 8 + 32 = 42)
-    state = src.State(value=44, rows=3)
+    state = src.State(value=44)
     new_state = state.mirror()
-    assert new_state == state.from_value(value=42)
+    assert new_state == src.State(value=42)
 
     # Mirror back to the original state
     new_state = new_state.mirror()
@@ -26,29 +27,33 @@ def test_mirror():
 
 
 def test_rotate():
-    state = src.State(value=1 << 4, rows=3)
+    src.State.rows = 3
+    state = src.State(value=1 << 4)
     new_state = state.rotate()
-    assert new_state == state.from_value(value=2)
+    assert new_state == src.State(value=2)
 
     # Rotate 101100 (1 + 4 + 8 = 13) into 100011 (1 + 16 + 32 = 49)
-    state = src.State(value=13, rows=3)
+    state = src.State(value=13)
     new_state = state.rotate()
-    assert new_state == state.from_value(value=49)
+    assert new_state == src.State(value=49)
 
     # Rotate standard-size game
-    state = src.State(value=1 << 4, rows=5)
+    src.State.rows = 5
+    state = src.State(value=1 << 4)
     new_state = state.rotate()
-    assert new_state == state.from_value(value=1 << 8)
+    assert new_state == src.State(value=1 << 8)
 
 
 def test_find_moves():
-    state = src.State(value=(1 << 4) + (1 << 2), rows=3)
+    src.State.rows = 3
+    state = src.State(value=(1 << 4) + (1 << 2))
     assert len(src.find_moves(state)) == 0
 
-    state = src.State(value=(1 << 4) + (1 << 5), rows=3)
-    assert src.find_moves(state) == {state.from_value(1 << 3)}
+    state = src.State(value=(1 << 4) + (1 << 5))
+    assert src.find_moves(state) == {src.State(1 << 3)}
 
-    state = src.State(value=(1 << 15) - 2 - (1 << 3), rows=5)
-    correct_moves = {state.from_value(28542), state.from_value(31678),
-                     state.from_value(32723), state.from_value(32718)}
+    src.State.rows = 5
+    state = src.State(value=(1 << 15) - 2 - (1 << 3))
+    correct_moves = {src.State(28542), src.State(31678),
+                     src.State(32723), src.State(32718)}
     assert src.find_moves(state) == correct_moves
