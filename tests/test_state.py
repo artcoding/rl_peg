@@ -50,10 +50,10 @@ def test_find_moves():
     assert len(src.find_moves(state)) == 0
 
     state = src.State(value=(1 << 4) + (1 << 5))
-    assert src.find_moves(state) == {src.State(1 << 3)}
+    assert src.find_moves(state) == {src.Action.from_int(1 << 3)}
 
     src.State.rows = 5
     state = src.State(value=(1 << 15) - 2 - (1 << 3))
-    correct_moves = {src.State(28542), src.State(31678),
-                     src.State(32723), src.State(32718)}
+    correct_moves = {src.Action.from_int(28542), src.Action.from_int(31678),
+                     src.Action.from_int(32723), src.Action.from_int(32718)}
     assert src.find_moves(state) == correct_moves
