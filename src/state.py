@@ -22,7 +22,7 @@ class State:
         return self.value
 
     def __repr__(self) -> str:
-        return f"value = {self.value}, {bin(self.value)}"
+        return f"state = {self.value} ({bin(self.value)})"
 
     def spaces(self) -> int:
         return (1 + self.rows) * self.rows // 2
