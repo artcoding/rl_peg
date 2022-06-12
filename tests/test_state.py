@@ -47,13 +47,18 @@ def test_rotate():
 def test_find_moves():
     src.State.rows = 3
     state = src.State(value=(1 << 4) + (1 << 2))
-    assert len(src.find_moves(state)) == 0
+    all_space_moves = src.all_actions(src.State.rows)
+    assert len(src.find_moves(state, all_space_moves)) == 0
 
     state = src.State(value=(1 << 4) + (1 << 5))
-    assert src.find_moves(state) == {src.Action.from_int(1 << 3)}
+    assert src.find_moves(state, all_space_moves) == {(src.Action(5, 4, 3), src.State(1 << 3))}
 
     src.State.rows = 5
+    all_space_moves = src.all_actions(src.State.rows)
     state = src.State(value=(1 << 15) - 2 - (1 << 3))
-    correct_moves = {src.Action.from_int(28542), src.Action.from_int(31678),
-                     src.Action.from_int(32723), src.Action.from_int(32718)}
-    assert src.find_moves(state) == correct_moves
+    correct_moves = {(src.Action(12, 7, 3), src.State(28542)),
+                     (src.Action(10, 6, 3), src.State(31678)),
+                     (src.Action(5, 2, 0),  src.State(32723)),
+                     (src.Action(5, 4, 3),  src.State(32718))}
+    found_moves = src.find_moves(state, all_space_moves)
+    assert found_moves == correct_moves
