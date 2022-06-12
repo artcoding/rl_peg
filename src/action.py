@@ -1,9 +1,11 @@
 from __future__ import annotations
-from src.utils import calc_space
+from src.utils import calc_space, calc_row_pos
 from src.state import State
 
 
 class Action:
+
+    rows = 5
 
     def __init__(self, move_from: int, kill: int, move_to: int):
         self.move_from = move_from
@@ -18,6 +20,40 @@ class Action:
 
     def __repr__(self) -> str:
         return f"From space = {self.move_from} to space = {self.move_to}"
+
+    def rotate(self) -> Action:
+        """
+        Return image of action rotated clockwise.
+        """
+        args = []
+        for space in (self.move_from, self.kill, self.move_to):
+            row, pos = calc_row_pos(space)
+            new_pos = self.rows - 1 - row
+            new_space = calc_space(row=new_pos + pos, pos=new_pos)
+            args.append(new_space)
+        return Action(*args)
+
+    def mirror(self) -> Action:
+        """
+        Return image of action reflected in vertical mirror.
+        """
+        args = []
+        for space in (self.move_from, self.kill, self.move_to):
+            row, pos = calc_row_pos(space)
+            new_space = calc_space(row=row, pos=row - pos)
+            args.append(new_space)
+        return Action(*args)
+
+    def all_equivalent(self) -> [Action]:
+        """
+        Return the set of States into which self transforms under all operations.
+        """
+        mirror = self.mirror()
+        rotated = self.rotate()
+        rotated_mirror = mirror.rotate()
+
+        res = [self, mirror, rotated, rotated_mirror, rotated.rotate(), rotated_mirror.rotate()]
+        return res
 
 
 def all_actions(rows: int = 5) -> dict:

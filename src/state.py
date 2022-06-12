@@ -96,7 +96,7 @@ class State:
 
         return other
 
-    def all_equivalent(self) -> {State}:
+    def all_equivalent(self) -> [State]:
         """
         Return the set of States into which self transforms under all operations.
         """
@@ -104,5 +104,5 @@ class State:
         rotated = self.rotate()
         rotated_mirror = mirror.rotate()
 
-        res = {self, mirror, rotated, rotated_mirror, rotated.rotate(), rotated_mirror.rotate()}
+        res = [self, mirror, rotated, rotated_mirror, rotated.rotate(), rotated_mirror.rotate()]
         return res
