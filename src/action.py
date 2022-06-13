@@ -91,6 +91,19 @@ def all_actions(rows: int = 5) -> dict:
     return moves
 
 
+def apply_action(action: Action, to_state: State) -> State:
+    """
+    Apply action to a State.
+
+    :return:    State after action
+    """
+    new_state = to_state.copy()
+    new_state.clear_space(action.move_from)
+    new_state.clear_space(action.kill)
+    new_state.set_space(action.move_to)
+    return new_state
+
+
 def find_moves(state: State, space_moves: dict) -> {State}:
     new_states = set()
 
@@ -100,10 +113,7 @@ def find_moves(state: State, space_moves: dict) -> {State}:
 
         for action in space_moves[space]:
             if not state.is_empty(action.kill) and state.is_empty(action.move_to):
-                new_state = state.copy()
-                new_state.clear_space(space)
-                new_state.clear_space(action.kill)
-                new_state.set_space(action.move_to)
+                new_state = apply_action(action, state)
                 new_states.add((action, new_state))
 
     return new_states
