@@ -1,6 +1,7 @@
 from __future__ import annotations
 from src.utils import calc_space, calc_row_pos
 from src.state import State
+from typing import Tuple
 
 
 class Action:
@@ -104,7 +105,10 @@ def apply_action(action: Action, to_state: State) -> State:
     return new_state
 
 
-def find_moves(state: State, space_moves: dict) -> {State}:
+def find_moves(state: State, space_moves: dict) -> {Tuple[Action, State]}:
+    """
+    Find all available Actions for a State
+    """
     new_states = set()
 
     for space in range(state.spaces()):
