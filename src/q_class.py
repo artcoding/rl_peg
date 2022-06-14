@@ -25,10 +25,13 @@ class Qclass:
         if m == 0:
             return None
         eps_m = self.eps / m
-        i_max = np.argmax(actions.values())
+        val = np.fromiter(actions.values(), dtype=float)
+        i_max = np.argmax(val)
+
+        # print(f"max Q = {np.max(val)}")
 
         rand = np.random.uniform()
-        if rand < eps_m * i_max:
+        if rand < eps_m * (i_max - 1):
             i = int(rand / eps_m)
         elif rand < eps_m * i_max + 1 - self.eps:
             i = i_max
